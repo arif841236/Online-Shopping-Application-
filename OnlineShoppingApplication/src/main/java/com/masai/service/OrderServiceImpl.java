@@ -7,11 +7,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.masai.entity.Address;
+import com.masai.entity.Customer;
 import com.masai.entity.Order;
 import com.masai.entity.Product;
 import com.masai.exception.OrderNotFoundException;
 import com.masai.exception.ProductNotFoundException;
-import com.masai.reopsitory.OrderDao;
+import com.masai.repository.OrderDao;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -85,6 +87,30 @@ public class OrderServiceImpl implements OrderService {
 		}
 		else {
 			throw new OrderNotFoundException("order not found with status :"+status);
+		}
+	}
+
+	@Override
+	public Address getAddressByOrderId(Integer id) throws OrderNotFoundException {
+		Optional<Order> opt=oDao.findById(id);
+		if(opt.isPresent()) {
+			Address address=oDao.getAddressByOrderId(id);
+			return address;
+		}
+		else {
+			throw new OrderNotFoundException("Order not found...");
+		}
+	}
+
+	@Override
+	public Customer getCustomerByOrderId(Integer id) throws OrderNotFoundException {
+		Optional<Order> opt= oDao.findById(id);
+		if(opt.isPresent()) {
+			Customer customer= oDao.getCustomerByOrderId(id);
+			return customer;
+		}
+		else {
+			throw new OrderNotFoundException("Order not found..");
 		}
 	}
 
